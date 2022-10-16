@@ -10,7 +10,7 @@ from chicken_coop import ChickenCoop
 class ChickenCoopCommander:
 #    """ BlaBla bla bla"""
 #
-    def __init__ (self, ChickenCoop cc):
+    def __init__ (self, chicken_coop.ChickenCoop cc):
         self.self.__cc = cc
         
         self.__temp_thread = threading.Thread(target=self.runTemperatureManagement, args=(self))
