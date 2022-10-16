@@ -37,8 +37,9 @@ pin_button_down = 12   # Taster 2
 timing_temperature = 1.
 timing_brightness = 2.
 
-door_open_time = time(hours=7, minutes=30)
-door_close_time = time(hours=18, minutes=0)
+# Das gibt ne saftige Fehlermeldung. mal schauen was da los ist.
+# door_open_time = time(hours=7, minutes=30)
+# door_close_time = time(hours=18, minutes=0)
         
 
         
