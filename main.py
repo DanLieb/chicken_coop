@@ -19,6 +19,7 @@ class ChickenCoopCommander:
     def runTemperatureManagement(self):
         while True:
             current_temperature = self.__cc.getTemperature()
+            logging.info("Temperatur bei %.2f", current_temperature)
             
             if (current_temperature <= settings.temperature_low and self.__cc.isHeating() == False):
                 self.__cc.heatingOn()
@@ -57,5 +58,5 @@ if __name__ == "__main__":
         cc_cmd.run()
         
     except Exception as e:
-        print('Another Error happend: %s' % e)
+        logging.info('Another Error happend: %s', e)
         
