@@ -1,14 +1,3 @@
-#!/usr/bin/python3
-
-import time
-import pigpio
-from pi1wire import Pi1Wire, W1Driver, OneWire
-
-from settings import CCSettings
-
-from threading import Thread
-
-
 class ChickenCoop:
     """A Class integrating all sensors and outputs available"""
     
@@ -33,8 +22,6 @@ class ChickenCoop:
                 self.pi.write(self.__settings.pin_relais_in_3, 1)
                 self.pi.write(self.__settings.pin_relais_in_4, 1)
                 
-                
-                
                 #
                 # Setup Input Pins 
                 #
@@ -45,8 +32,13 @@ class ChickenCoop:
                 self.pi.set_mode(self.__settings.pin_button_down, pigpio.INPUT)
                 self.pi.set_pull_up_down(self.__settings.pin_button_up, pigpio.PUD_UP)
                 self.pi.set_pull_up_down(self.__settings.pin_button_down, pigpio.PUD_UP)
+                
+                # 100 ms filtering to avoid multiple callbacks 
+                
                 self.pi.set_glitch_filter(self.__settings.pin_button_up, 100000)
                 self.pi.set_glitch_filter(self.__settings.pin_button_down, 100000)
+                
+                # Use the falling edge because i use a pullup res. for the button input.
                 
                 self.pi.callback(self.__settings.pin_button_up, pigpio.FALLING_EDGE, self.callbackUp)
                 self.pi.callback(self.__settings.pin_button_down, pigpio.FALLING_EDGE, self.callbackDown)
@@ -111,30 +103,30 @@ class ChickenCoop:
         time.sleep(0.5)
         self.pi.write(self.__settings.pin_relais_in_4, 1)
         
+    def getTemperature(self):
+        current_temperature = self.temp_sensor.get_temperature()
+        return current_temperature
+        
+        
     
-    def run(self):
-        while (True):
-            try:  
-                current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-                current_temperature = self.temp_sensor.get_temperature()
+    # def run(self):
+    #     while (True):
+    #         try:  
+    #             current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
                 
-                # print('Zeitpunkt: %s  Temperatur: %.2f °C' % (current_time, current_temperature))
                 
-                if (current_temperature <= self.__settings.temperature_low and self.heating == False):
-                    self.heatingOn()
-                    print("Zeitpunkt: %s: Wärmelampe Ein bei %.2f" % (current_time, current_temperature))
-                elif (current_temperature >= self.__settings.temperature_high and self.heating == True):
-                    self.heatingOff()
-                    print("Zeitpunkt: %s: Wärmelampe Aus bei %.2f" % (current_time, current_temperature))
+    #             # print('Zeitpunkt: %s  Temperatur: %.2f °C' % (current_time, current_temperature))
                 
-                time.sleep(1.)
+
                 
-            except KeyboardInterrupt:
-                print('Byebye')
-                break
-            except Exception as e:
-                print('Another Error happend: %s' % e)
-                break
+    #             time.sleep(1.)
+                
+    #         except KeyboardInterrupt:
+    #             print('Byebye')
+    #             break
+    #         except Exception as e:
+    #             print('Another Error happend: %s' % e)
+    #             break
     
     
     
@@ -142,20 +134,3 @@ class ChickenCoop:
         self.heatingOff()
         self.lightOff()
         self.pi.stop()
-            
-            
-class ChickenCoopCommander:
-    def __init__(self):
-        print("Not implemented Yet")
-                 
-        
-chicken_coop = None
-
-if __name__ == "__main__":
-    
-    try:
-        chicken_coop = ChickenCoop()
-        chicken_coop.run()
-    except Exception as e:
-        print('Another Error happend: %s' % e)
-        
