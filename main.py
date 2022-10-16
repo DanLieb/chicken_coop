@@ -6,10 +6,12 @@ import threading
 
 import settings
 from chicken_coop import ChickenCoop
+
+
 class ChickenCoopCommander:
     
     def __init__(self, cc):
-        self.self.__cc = cc
+        self.__cc = cc
         
         self.__temp_thread = threading.Thread(target=self.runTemperatureManagement, args=(self))
         self.__temp_stop = threading.Event()
@@ -18,7 +20,7 @@ class ChickenCoopCommander:
         while True:
             current_temperature = self.__cc.getTemperature()
             
-            if (current_temperature <= settings.temperature_low and self.self.__cc.isHeating() == False):
+            if (current_temperature <= settings.temperature_low and self.__cc.isHeating() == False):
                 self.__cc.heatingOn()
                 logging.info("Wärmelampe Ein bei %.2f", current_temperature)
             elif (current_temperature >= settings.temperature_high and self.__cc.isHeating() == True):
