@@ -16,6 +16,9 @@ class ChickenCoopCommander:
         self.__temp_thread = threading.Thread(target=self.runTemperatureManagement)
         self.__temp_stop = threading.Event()
         
+        self.__light_thread = threading.Thread(target=self.runLightManagement)
+        self.__light_stop = threading.Event()
+        
     def runTemperatureManagement(self):
         while True:
             current_temperature = self.__cc.getTemperature()
@@ -32,16 +35,35 @@ class ChickenCoopCommander:
                 break
             time.sleep(settings.timing_temperature)
             
+    def runLightManagement(self):
+        while True:
+            current_brightness = self.__cc.getBrightness()
+
+            if self.__cc.isLight() == True:
+                self.__cc.lightOff()
+            else:
+                self.__cc.lightOn()    
+            
+
+            if self.__light_stop.is_set():
+                break
+            
+            time.sleep(settings.timing_brightness)
+            
     def run(self):
-        logging.info("Starting Temperature Management")
+        logging.info("Starting Light & Temperature Management")
         
         self.__temp_thread.start()
+        self.__light_thread.start()
         
-        logging.info("Starting Temperature Management Done!")
+        logging.info("Starting Light & Temperature Management Done!")
         
     def __del__(self):
         self.__temp_stop.set()
         self.__temp_thread.join()
+        
+        self.__light_stop.set()
+        self.__light_thread.join()
 
 
 if __name__ == "__main__":

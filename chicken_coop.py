@@ -1,6 +1,7 @@
 import pigpio
 from pi1wire import Pi1Wire, W1Driver, OneWire
 
+import logging
 import settings
 import time
 
@@ -60,6 +61,8 @@ class ChickenCoop:
             # Init Brightness Sensor
             #
             
+            self.light = False
+            
             self.heating = False
             
             print("Connected to temperature sensor")
@@ -94,6 +97,14 @@ class ChickenCoop:
     def heatingOff(self):
         self.heating = False
         self.pi.write(settings.pin_relais_in_1, 1)
+        
+    def lightOn(self):
+        self.light = True
+        self.pi.write(settings.pin_relais_in_2, 0)
+        
+    def lightOff(self):
+        self.light = False
+        self.pi.write(settings.pin_relais_in_2, 1)
     
     def doorOpen(self):
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
@@ -115,9 +126,15 @@ class ChickenCoop:
     def getTemperature(self):
         current_temperature = self.temp_sensor.get_temperature()
         return current_temperature
+    
+    def getBrightness(self):
+        logging.info("getBrightness() Not Implemented Yet")
         
     def isHeating(self):
         return self.heating
+    
+    def isLight(self):
+        return self.light
     
     
     # def run(self):
