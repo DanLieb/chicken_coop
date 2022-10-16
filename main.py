@@ -6,11 +6,9 @@ import threading
 
 import settings
 from chicken_coop import ChickenCoop
-
 class ChickenCoopCommander:
-#    """ BlaBla bla bla"""
-#
-    def __init__ (self, chicken_coop.ChickenCoop cc):
+    
+    def __init__(self, chicken_coop.ChickenCoop cc):
         self.self.__cc = cc
         
         self.__temp_thread = threading.Thread(target=self.runTemperatureManagement, args=(self))
@@ -31,17 +29,12 @@ class ChickenCoopCommander:
                 break
             time.sleep(settings.timing_temperature)
             
-            
-            
-        
-        
     def run(self):
         logging.info("Starting Temperature Management")
         
         self.__temp_thread.start()
         
         logging.info("Starting Temperature Management Done!")
-        
         
     def __del__(self):
         self.__temp_stop.set()
