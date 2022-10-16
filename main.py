@@ -8,7 +8,7 @@ import settings
 from chicken_coop import ChickenCoop
 class ChickenCoopCommander:
     
-    def __init__(self, ChickenCoop cc):
+    def __init__(self, cc):
         self.self.__cc = cc
         
         self.__temp_thread = threading.Thread(target=self.runTemperatureManagement, args=(self))
