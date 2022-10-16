@@ -46,7 +46,7 @@ if __name__ == "__main__":
     
     logging.basicConfig(format=format, level=logging.INFO, datefmt="%Y-%m-%D %H:%M:%S")
 
-    logging.INFO("Starting in __main__")
+    logging.info("Starting in __main__")
     
     try:
         cc = ChickenCoop()
