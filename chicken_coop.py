@@ -13,6 +13,7 @@ class ChickenCoop:
 
  
     def __init__(self):        
+        global global_chicken_coop 
         global_chicken_coop = self
         
         try:
