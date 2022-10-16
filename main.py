@@ -1,48 +1,51 @@
 #!/usr/bin/python3
 
-
-import pigpio
-from pi1wire import Pi1Wire, W1Driver, OneWire
-
 import time
 import logging
 import threading
 
-from settings import CCSettings
-import chicken_coop
-            
-my_chicken_coop = None       
+import settings
+from chicken_coop import ChickenCoop
 
 class ChickenCoopCommander:
-    """ BlaBla bla bla"""
-    
-    self.cc = None
-    
-    self.temp_thread = None
-    self.bright_thread = None
-    self.server_thread = None
-    
-    def __init__(self, ChickenCoop cc):
-        self.cc = cc
+#    """ BlaBla bla bla"""
+#
+    def __init__ (self, ChickenCoop cc):
+        self.self.__cc = cc
         
-        self.temp_thread = threading.Thread
-    
-    def run(self):
-        print("Not Implemented Yet...")
+        self.__temp_thread = threading.Thread(target=self.runTemperatureManagement, args=(self))
+        self.__temp_stop = threading.Event()
         
     def runTemperatureManagement(self):
-        logging.info("Starting Temperature Management")
-        current_temperature = self.getTemperature()
+        while True:
+            current_temperature = self.__cc.getTemperature()
+            
+            if (current_temperature <= settings.temperature_low and self.self.__cc.isHeating() == False):
+                self.__cc.heatingOn()
+                logging.info("Wärmelampe Ein bei %.2f", current_temperature)
+            elif (current_temperature >= settings.temperature_high and self.__cc.isHeating() == True):
+                self.__cc.heatingOff()
+                logging.info("Wärmelampe Aus bei %.2f", current_temperature)
+                
+            if self.__temp_stop.is_set():
+                break
+            time.sleep(settings.timing_temperature)
+            
+            
+            
         
-        if (current_temperature <= self.__settings.temperature_low and self.heating == False):
-            self.heatingOn()
-            print("Zeitpunkt: %s: Wärmelampe Ein bei %.2f" % (current_time, current_temperature))
-        elif (current_temperature >= self.__settings.temperature_high and self.heating == True):
-            self.heatingOff()
-            print("Zeitpunkt: %s: Wärmelampe Aus bei %.2f" % (current_time, current_temperature))
         
     def run(self):
         logging.info("Starting Temperature Management")
+        
+        self.__temp_thread.start()
+        
+        logging.info("Starting Temperature Management Done!")
+        
+        
+    def __del__(self):
+        self.__temp_stop.set()
+        self.__temp_thread.join()
 
 if __name__ == "__main__":
     format = "%(asctime)s: %(message)s"
@@ -52,8 +55,8 @@ if __name__ == "__main__":
     logging.INFO("Starting in __main__")
     
     try:
-        my_chicken_coop = ChickenCoop()
-        cc_cmd = ChickenCoopCommander(my_chicken_coop)
+        cc = ChickenCoop()
+        cc_cmd = ChickenCoopCommander(cc)
         
         cc_cmd.run()
         

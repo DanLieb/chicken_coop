@@ -1,10 +1,18 @@
+# import pigpio
+# from pi1wire import Pi1Wire, W1Driver, OneWire
+
+import settings
+import time
+
+
+chicken_coop = None
 class ChickenCoop:
     """A Class integrating all sensors and outputs available"""
-    
-    __settings = None
+
  
-    def __init__(self):
-        self.__settings = CCSettings()
+    def __init__(self):        
+        chicken_coop = self
+        
         try:
             self.pi = pigpio.pi()
             if not self.pi.connected:
@@ -12,15 +20,15 @@ class ChickenCoop:
             else:
                 print("Setting Up Output Pins")
                 
-                self.pi.set_mode(self.__settings.pin_relais_in_1, pigpio.OUTPUT)
-                self.pi.set_mode(self.__settings.pin_relais_in_2, pigpio.OUTPUT)
-                self.pi.set_mode(self.__settings.pin_relais_in_3, pigpio.OUTPUT)
-                self.pi.set_mode(self.__settings.pin_relais_in_4, pigpio.OUTPUT)
+                self.pi.set_mode(settings.pin_relais_in_1, pigpio.OUTPUT)
+                self.pi.set_mode(settings.pin_relais_in_2, pigpio.OUTPUT)
+                self.pi.set_mode(settings.pin_relais_in_3, pigpio.OUTPUT)
+                self.pi.set_mode(settings.pin_relais_in_4, pigpio.OUTPUT)
                 
-                self.pi.write(self.__settings.pin_relais_in_1, 1)
-                self.pi.write(self.__settings.pin_relais_in_2, 1)
-                self.pi.write(self.__settings.pin_relais_in_3, 1)
-                self.pi.write(self.__settings.pin_relais_in_4, 1)
+                self.pi.write(settings.pin_relais_in_1, 1)
+                self.pi.write(settings.pin_relais_in_2, 1)
+                self.pi.write(settings.pin_relais_in_3, 1)
+                self.pi.write(settings.pin_relais_in_4, 1)
                 
                 #
                 # Setup Input Pins 
@@ -28,22 +36,22 @@ class ChickenCoop:
                 
                 print("Setting Up Input Pins")
                 
-                self.pi.set_mode(self.__settings.pin_button_up, pigpio.INPUT)
-                self.pi.set_mode(self.__settings.pin_button_down, pigpio.INPUT)
-                self.pi.set_pull_up_down(self.__settings.pin_button_up, pigpio.PUD_UP)
-                self.pi.set_pull_up_down(self.__settings.pin_button_down, pigpio.PUD_UP)
+                self.pi.set_mode(settings.pin_button_up, pigpio.INPUT)
+                self.pi.set_mode(settings.pin_button_down, pigpio.INPUT)
+                self.pi.set_pull_up_down(settings.pin_button_up, pigpio.PUD_UP)
+                self.pi.set_pull_up_down(settings.pin_button_down, pigpio.PUD_UP)
                 
                 # 100 ms filtering to avoid multiple callbacks 
                 
-                self.pi.set_glitch_filter(self.__settings.pin_button_up, 100000)
-                self.pi.set_glitch_filter(self.__settings.pin_button_down, 100000)
+                self.pi.set_glitch_filter(settings.pin_button_up, 100000)
+                self.pi.set_glitch_filter(settings.pin_button_down, 100000)
                 
                 # Use the falling edge because i use a pullup res. for the button input.
                 
-                self.pi.callback(self.__settings.pin_button_up, pigpio.FALLING_EDGE, self.callbackUp)
-                self.pi.callback(self.__settings.pin_button_down, pigpio.FALLING_EDGE, self.callbackDown)
+                self.pi.callback(settings.pin_button_up, pigpio.FALLING_EDGE, self.callbackUp)
+                self.pi.callback(settings.pin_button_down, pigpio.FALLING_EDGE, self.callbackDown)
             
-            self.temp_sensor = Pi1Wire().find(self.__settings.mac_sensor_temp)
+            self.temp_sensor = Pi1Wire().find(settings.mac_sensor_temp)
             
             print("Connected to temperature sensor")
             
@@ -80,34 +88,36 @@ class ChickenCoop:
     
     def heatingOn(self):
         self.heating = True
-        self.pi.write(self.__settings.pin_relais_in_1, 0)
+        self.pi.write(settings.pin_relais_in_1, 0)
 
     def heatingOff(self):
         self.heating = False
-        self.pi.write(self.__settings.pin_relais_in_1, 1)
+        self.pi.write(settings.pin_relais_in_1, 1)
     
     def doorOpen(self):
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
         print('Zeitpunkt: %s Open Door Signal' % (current_time))
         
-        self.pi.write(self.__settings.pin_relais_in_3, 0)
+        self.pi.write(settings.pin_relais_in_3, 0)
         time.sleep(0.5)
-        self.pi.write(self.__settings.pin_relais_in_3, 1)
+        self.pi.write(settings.pin_relais_in_3, 1)
         
 
     def doorClose(self):
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
         print('Zeitpunkt: %s Close Door Signal' % (current_time))
         
-        self.pi.write(self.__settings.pin_relais_in_4, 0)
+        self.pi.write(settings.pin_relais_in_4, 0)
         time.sleep(0.5)
-        self.pi.write(self.__settings.pin_relais_in_4, 1)
+        self.pi.write(settings.pin_relais_in_4, 1)
         
     def getTemperature(self):
         current_temperature = self.temp_sensor.get_temperature()
         return current_temperature
         
-        
+    def isHeating(self):
+        return self.heating
+    
     
     # def run(self):
     #     while (True):
@@ -127,8 +137,6 @@ class ChickenCoop:
     #         except Exception as e:
     #             print('Another Error happend: %s' % e)
     #             break
-    
-    
     
     def __del__(self):
         self.heatingOff()
