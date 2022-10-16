@@ -1,17 +1,18 @@
-# import pigpio
-# from pi1wire import Pi1Wire, W1Driver, OneWire
+import pigpio
+from pi1wire import Pi1Wire, W1Driver, OneWire
 
 import settings
 import time
 
 
-chicken_coop = None
+global_chicken_coop = None
+
 class ChickenCoop:
     """A Class integrating all sensors and outputs available"""
 
  
     def __init__(self):        
-        chicken_coop = self
+        global_chicken_coop = self
         
         try:
             self.pi = pigpio.pi()
@@ -76,14 +77,14 @@ class ChickenCoop:
     def callbackUp(gpio, level, tick):
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
         # print('Zeitpunkt: %s  Level: %i on GPIO %i' % (current_time, level, gpio))
-        chicken_coop.doorOpen()
+        global_chicken_coop.doorOpen()
         
     
     @staticmethod
     def callbackDown(gpio, level, tick):
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
         # print('Zeitpunkt: %s  Level: %i on GPIO %i' % (current_time, level, gpio))
-        chicken_coop.doorClose()
+        global_chicken_coop.doorClose()
     
     
     def heatingOn(self):
