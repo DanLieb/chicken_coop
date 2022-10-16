@@ -13,7 +13,7 @@ class ChickenCoopCommander:
     def __init__(self, cc):
         self.__cc = cc
         
-        self.__temp_thread = threading.Thread(target=self.runTemperatureManagement, args=(self))
+        self.__temp_thread = threading.Thread(target=self.runTemperatureManagement)
         self.__temp_stop = threading.Event()
         
     def runTemperatureManagement(self):
