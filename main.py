@@ -3,6 +3,7 @@
 import time
 import logging
 import threading
+from flask import Flask
 
 import settings
 from chicken_coop import ChickenCoop

@@ -129,7 +129,8 @@ class ChickenCoop:
         return current_temperature
     
     def getBrightness(self):
-        logging.info("getBrightness() Not Implemented Yet")
+        # logging.info("getBrightness() Not Implemented Yet")
+        pass
         
     def isHeating(self):
         return self.heating
