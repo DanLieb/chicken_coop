@@ -17,7 +17,7 @@ temperature_high = temperature_low + 3
 
 brightness_address = 0x23
 
-brightness_low = 100
+brightness_low = 5
 brightness_high = brightness_low + 50
 
 #
@@ -42,6 +42,18 @@ timing_brightness = 1.
 # Das gibt ne saftige Fehlermeldung. mal schauen was da los ist.
 # door_open_time = time(hours=7, minutes=30)
 # door_close_time = time(hours=18, minutes=0)
+
+# TIMING: 
+#
+# when current_brightness < brightness_low
+#   -> lights on
+#   -> after door_cown_seconds Door is Closed
+#   -> after lights_out_seconds the light is turned off
+#
+ 
+
+lights_out_seconds = 5
+door_down_seconds = 3
         
 
         

@@ -18,6 +18,9 @@ class ChickenCoopCommander:
         self.__light_thread = threading.Thread(target=self.runLightManagement)
         self.__light_stop = threading.Event()
         
+        self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
+        self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
+        self.__light_goodnight = False
     def runTemperatureManagement(self):
         while True:
             current_temperature = self.__cc.getTemperature()
@@ -37,20 +40,48 @@ class ChickenCoopCommander:
     def runLightManagement(self):
         while True:
             current_brightness = self.__cc.getBrightness()
-            print("%.2f lx" % current_brightness)
             
             logging.info("Helligkeit bei %.2f lx", current_brightness)
             
-            if self.__cc.isLight() == True:
-                self.__cc.lightOff()
+            if current_brightness < settings.brightness_low:
+                if not self.__light_goodnight:
+                    self.__light_goodnight = True
+                    self.__cc.lightOn()
+                    logging.info("es wird Nacht - Licht an! - Rein in die Bude")
+                else:
+                    self.__lights_out_counter -= 1
+                    self.__door_down_counter -= 1
+                    
+                    if self.__lights_out_counter == 0:
+                        self.__cc.lightOff()
+                        self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
+                        logging.info("Alle herinnen? - Schlafenszeit!!")
+                    
+                    if self.__door_down_counter == 0:
+                        self.__cc.closeDoor()
+                        self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
+                        logging.info("Alle herinnen? - Türl zu!!")
+                    
+            if current_brightness > settings.brightness_high:
+                self.__light_goodnight = False  
                 
-            else:
-                self.__cc.lightOn()    
+                self.__cc.openDoor() 
+                
+
+                
+            
+            # if self.__cc.isLight() == True:
+            #     self.__cc.lightOff()
+                
+            # else:
+            #     self.__cc.lightOn()    
+            
             
 
             if self.__light_stop.is_set():
                 break
             
+            # i dont care about a slight tick/seconds deviation 
             time.sleep(settings.timing_brightness)
             
     def run(self):

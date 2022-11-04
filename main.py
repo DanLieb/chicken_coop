@@ -19,8 +19,8 @@ if __name__ == "__main__":
     logging.basicConfig(
         format=format, 
         level=logging.INFO,
-        datefmt="%Y-%m-%D %H:%M:%S",
-        filename="output.log")
+        datefmt="%Y-%m-%D %H:%M:%S")
+        # filename="output.log")
 
     logging.info("Starting in __main__")
     
