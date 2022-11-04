@@ -19,8 +19,11 @@ class ChickenCoopCommander:
         self.__light_stop = threading.Event()
         
         self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
+        # self.__lights_counting = True
         self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
+        self.__door_counting = True
         self.__light_goodnight = False
+        
         
     def runTemperatureManagement(self):
         while True:
@@ -50,26 +53,30 @@ class ChickenCoopCommander:
                     self.__cc.lightOn()
                     logging.info("es wird Nacht - Licht an! - Rein in die Bude")
                 else:
-                    self.__lights_out_counter -= 1
-                    self.__door_down_counter -= 1
                     
-                    if self.__lights_out_counter == 0:
-                        self.__cc.lightOff()
-                        self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
-                        logging.info("Alle herinnen? - Schlafenszeit!!")
-                    
-                    if self.__door_down_counter == 0:
-                        self.__cc.doorClose()
-                        self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
-                        logging.info("Alle herinnen? - Türl zu!!")
+                    if self.__lights_out_counter != 0:
+                        self.__lights_out_counter -= 1
+                        
+                        if self.__lights_out_counter == 0:
+                            self.__cc.lightOff()
+                            logging.info("Alle herinnen? - Schlafenszeit!!")
+                        
+                    if self.__door_counting:
+                        self.__door_down_counter -= 1
+                        if self.__door_down_counter == 0:
+                            self.__cc.doorClose()
+                            self.__door_counting = False
+                            self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
+                            logging.info("Alle herinnen? - Türl zu!!")
                     
             if current_brightness > settings.brightness_high:
                 
                 if self.__light_goodnight:
                     self.__light_goodnight = False  
+                    self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
                     self.__cc.doorOpen() 
                     logging.info("Guten Morgen! - Raus mit euch!!")
-                    logging.info("Guten Morgen! - Raus mit euch!!")
+
                     
                 
 
