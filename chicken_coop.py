@@ -53,6 +53,12 @@ class ChickenCoop:
                 
                 self.pi.callback(settings.pin_button_up, pigpio.FALLING_EDGE, self.callbackUp)
                 self.pi.callback(settings.pin_button_down, pigpio.FALLING_EDGE, self.callbackDown)
+                
+                # open i2c channel for connection with brightness sensor bh1750
+                
+                self.brightness_sensor = self.pi.i2c_open(0, settings.brightness_address)
+                
+                
             
             self.temp_sensor = Pi1Wire().find(settings.mac_sensor_temp)
             
@@ -129,8 +135,12 @@ class ChickenCoop:
         return current_temperature
     
     def getBrightness(self):
-        # logging.info("getBrightness() Not Implemented Yet")
-        pass
+        data = self.pi.i2c_read_word_data(settings.brightness_address, 0x20)
+        print("data = %i" % data)
+        count = data >> 8 | (data & 0xff) << 8
+        print("count = %i" % count)
+        brightness = count / 1.2
+        return brightness
         
     def isHeating(self):
         return self.heating
@@ -159,6 +169,7 @@ class ChickenCoop:
     #             break
     
     def __del__(self):
+        self.pi.i2c_close(self.brightness_sensor)
         self.heatingOff()
         self.lightOff()
         self.pi.stop()

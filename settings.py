@@ -15,6 +15,8 @@ temperature_high = temperature_low + 3
 # brightness settings
 #
 
+brightness_address = 0x23
+
 brightness_low = 100
 brightness_high = brightness_low + 50
 
@@ -35,7 +37,7 @@ pin_button_down = 12   # Taster 2
 #
 
 timing_temperature = 1.
-timing_brightness = 2.
+timing_brightness = 1.
 
 # Das gibt ne saftige Fehlermeldung. mal schauen was da los ist.
 # door_open_time = time(hours=7, minutes=30)
