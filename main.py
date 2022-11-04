@@ -31,7 +31,7 @@ if __name__ == "__main__":
     
     basic_logger = logging.getLogger("Basic Logging")
     basic_handler = logging.StreamHandler()
-    basic_handler.setFormatter("%(asctime)s: %(message)s")
+    basic_handler.setFormatter(logging.Formatter("%(asctime)s: %(message)s"))
     basic_logger.setLevel(logging.INFO)
     basic_logger.addHandler(basic_handler)
     
