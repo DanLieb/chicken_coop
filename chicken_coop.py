@@ -25,7 +25,7 @@ class ChickenCoop:
             if not self.pi.connected:
                 basic_logger.error("OOps i couldn't connect to the pigpio daemon!")
             else:
-                basic_logger.info("Setting Up Output Pins")
+                basic_logger.info("Setting up output pins")
                 
                 self.pi.set_mode(settings.pin_relais_in_1, pigpio.OUTPUT)
                 self.pi.set_mode(settings.pin_relais_in_2, pigpio.OUTPUT)
@@ -41,7 +41,7 @@ class ChickenCoop:
                 # Setup Input Pins 
                 #
                 
-                basic_logger.info("Setting Up Input Pins")
+                basic_logger.info("Setting up input pins")
                 
                 self.pi.set_mode(settings.pin_button_up, pigpio.INPUT)
                 self.pi.set_mode(settings.pin_button_down, pigpio.INPUT)
@@ -60,7 +60,7 @@ class ChickenCoop:
             
             self.temp_sensor = Pi1Wire().find(settings.mac_sensor_temp)
             
-            basic_logger.info("Connected to temperature sensor")
+            basic_logger.info("Connected to the temperature sensor")
             
             # 
             

@@ -28,7 +28,7 @@ class ChickenCoopCommander:
         self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
         # self.__lights_counting = True
         self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
-        self.__door_counting = True
+        # self.__door_counting = True
         self.__light_goodnight = False
         
         
