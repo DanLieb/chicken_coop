@@ -58,6 +58,8 @@ class ChickenCoop:
                 
                 self.brightness_sensor = self.pi.i2c_open(0, settings.brightness_address)
                 
+                print("handle = %i" % self.brightness_sensor)
+                
                 
             
             self.temp_sensor = Pi1Wire().find(settings.mac_sensor_temp)
