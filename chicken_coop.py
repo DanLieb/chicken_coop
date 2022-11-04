@@ -8,7 +8,7 @@ import time
 import smbus
 from bh1750 import BH1750
 
-
+basic_logger = logging.getLogger("Basic Logging")
 
 global_chicken_coop = None
 

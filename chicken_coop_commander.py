@@ -10,6 +10,8 @@ temp_logger = logging.getLogger("Temperature_Sensor")
 
 brightness_logger = logging.getLogger("Brightness_Sensor")
 
+basic_logger = logging.getLogger("Basic Logging")
+
 
 
 class ChickenCoopCommander:
@@ -37,10 +39,10 @@ class ChickenCoopCommander:
             
             if (current_temperature <= settings.temperature_low and self.__cc.isHeating() == False):
                 self.__cc.heatingOn()
-                logging.info("Wärmelampe Ein bei %.2f", current_temperature)
+                basic_logger.info("Wärmelampe Ein bei %.2f", current_temperature)
             elif (current_temperature >= settings.temperature_high and self.__cc.isHeating() == True):
                 self.__cc.heatingOff()
-                logging.info("Wärmelampe Aus bei %.2f", current_temperature)
+                basic_logger.info("Wärmelampe Aus bei %.2f", current_temperature)
                 
             if self.__temp_stop.is_set():
                 break
@@ -55,7 +57,7 @@ class ChickenCoopCommander:
             if current_brightness < settings.brightness_low:
                 if not self.__light_goodnight:
                     self.__light_goodnight = True
-                    logging.info("es wird dunkel bei bei %.2f lx - Licht an! - Rein in die Bude", current_brightness)
+                    basic_logger.info("es wird dunkel bei bei %.2f lx - Licht an! - Rein in die Bude", current_brightness)
                     self.__cc.lightOn()
                 else:
                     
@@ -65,7 +67,7 @@ class ChickenCoopCommander:
                         
                         if self.__lights_out_counter == 0:
                             
-                            logging.info("Schlafenszeit!! - A Ruah is und Licht aus")
+                            basic_logger.info("Schlafenszeit!! - A Ruah is und Licht aus")
                             self.__cc.lightOff()
                         
                     if self.__door_down_counter != 0:
@@ -74,7 +76,7 @@ class ChickenCoopCommander:
                         
                         if self.__door_down_counter == 0:
                             self.__cc.doorClose()
-                            logging.info("Alle herinnen? - Türl zu!!")
+                            basic_logger.info("Alle herinnen? - Türl zu!!")
 
                     
             if current_brightness > settings.brightness_high:
@@ -84,7 +86,7 @@ class ChickenCoopCommander:
                     self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
                     self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
                     self.__cc.doorOpen() 
-                    logging.info("Guten Morgen! - Raus mit euch!!")
+                    basic_logger.info("Guten Morgen! - Raus mit euch!!")
 
 
             if self.__light_stop.is_set():
@@ -94,14 +96,15 @@ class ChickenCoopCommander:
             time.sleep(settings.timing_brightness)
             
     def run(self):
-        logging.info("Starting Light & Temperature Management")
+        basic_logger.info("Starting Light & Temperature Management")
         
         self.__temp_thread.start()
         self.__light_thread.start()
         
-        logging.info("Starting Light & Temperature Management Done!")
+        basic_logger.info("Starting Light & Temperature Management Done!")
         
     def __del__(self):
+        basic_logger.info("Shutting Down Everything - Prepare for evacuation")
         self.__temp_stop.set()
         self.__temp_thread.join()
         

@@ -27,15 +27,15 @@ if __name__ == "__main__":
     brightness_handler = logging.FileHandler(settings.TEMP_LOGS)
     brightness_handler.setFormatter(data_formatter)
     brightness_logger.setLevel(logging.INFO)
-    brightness_logger.addHandler(temp_handler)
+    brightness_logger.addHandler(brightness_handler)
     
-    logging.basicConfig(
-        format="%(asctime)s: %(message)s", 
-        level=logging.INFO,
-        datefmt="%Y-%m-%D %H:%M:%S")
-        # filename="output.log")
-
-    logging.info("Starting Up The ChickenScoop Module")
+    basic_logger = logging.getLogger("Basic Logging")
+    basic_handler = logging.StreamHandler()
+    basic_handler.setFormatter("%(asctime)s: %(message)s")
+    basic_logger.setLevel(logging.INFO)
+    basic_logger.addHandler(basic_handler)
+    
+    basic_logger.info("Starting Up The ChickenScoop Module")
     
     try:
         cc = ChickenCoop()
@@ -44,5 +44,5 @@ if __name__ == "__main__":
         cc_cmd.run()
         
     except Exception as e:
-        logging.info('Another Error happend: %s', e)
+        basic_logger.info('Another Error happend: %s', e)
         
