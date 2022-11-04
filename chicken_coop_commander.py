@@ -45,7 +45,7 @@ class ChickenCoopCommander:
         while True:
             current_brightness = self.__cc.getBrightness()
             
-            logging.info("Helligkeit bei %.2f lx", current_brightness)
+            # logging.info("Helligkeit bei %.2f lx", current_brightness)
             
             if current_brightness < settings.brightness_low:
                 if not self.__light_goodnight:
