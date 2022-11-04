@@ -5,7 +5,9 @@ import logging
 import settings
 import time
 
+import smbus
 from bh1750 import BH1750
+
 
 
 global_chicken_coop = None
