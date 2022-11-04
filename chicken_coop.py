@@ -23,9 +23,9 @@ class ChickenCoop:
         try:
             self.pi = pigpio.pi()
             if not self.pi.connected:
-                print("OOps i couldn't connect to the pigpio daemon!")
+                basic_logger.error("OOps i couldn't connect to the pigpio daemon!")
             else:
-                print("Setting Up Output Pins")
+                basic_logger.info("Setting Up Output Pins")
                 
                 self.pi.set_mode(settings.pin_relais_in_1, pigpio.OUTPUT)
                 self.pi.set_mode(settings.pin_relais_in_2, pigpio.OUTPUT)
@@ -41,7 +41,7 @@ class ChickenCoop:
                 # Setup Input Pins 
                 #
                 
-                print("Setting Up Input Pins")
+                basic_logger.info("Setting Up Input Pins")
                 
                 self.pi.set_mode(settings.pin_button_up, pigpio.INPUT)
                 self.pi.set_mode(settings.pin_button_down, pigpio.INPUT)
@@ -60,42 +60,29 @@ class ChickenCoop:
             
             self.temp_sensor = Pi1Wire().find(settings.mac_sensor_temp)
             
-            print("Connected to temperature sensor")
+            basic_logger.info("Connected to temperature sensor")
             
             # 
             
             bus = smbus.SMBus(1)
             self.brightness_sensor = BH1750(bus)
-            print("Connected to the brightness sensor")
+            basic_logger.info("Connected to the brightness sensor")
             
             self.heating = False
             
             self.light = False
             
         except Exception as e:
-            print("OOps i f***** it up: \n %s" % e)
+            basic_logger.error("OOps i f***** it up: \n %s" % e)
             
-        #
-            # Init Brightness Sensor
-            #
-                            # open i2c channel for connection with brightness sensor bh1750
-        # try:
-        #     self.brightness_sensor = self.pi.i2c_open(0, settings.brightness_address)
-        #     self.pi.i2c_write_byte(self.brightness_sensor, 0x01)
-            
-        #     print("handle = %i" % self.brightness_sensor)
     
     @staticmethod    
     def callbackUp(gpio, level, tick):
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-        # print('Zeitpunkt: %s  Level: %i on GPIO %i' % (current_time, level, gpio))
         global_chicken_coop.doorOpen()
         
     
     @staticmethod
     def callbackDown(gpio, level, tick):
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-        # print('Zeitpunkt: %s  Level: %i on GPIO %i' % (current_time, level, gpio))
         global_chicken_coop.doorClose()
     
     def heatingOn(self):
@@ -115,8 +102,8 @@ class ChickenCoop:
         self.pi.write(settings.pin_relais_in_2, 1)
     
     def doorOpen(self):
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-        print('Zeitpunkt: %s Open Door Signal' % (current_time))
+        # current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+        basic_logger.info('Open Door Signal')
         
         self.pi.write(settings.pin_relais_in_3, 0)
         time.sleep(0.5)
@@ -124,8 +111,8 @@ class ChickenCoop:
         
 
     def doorClose(self):
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-        print('Zeitpunkt: %s Close Door Signal' % (current_time))
+        # current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+        basic_logger.info('Close Door Signal')
         
         self.pi.write(settings.pin_relais_in_4, 0)
         time.sleep(0.5)

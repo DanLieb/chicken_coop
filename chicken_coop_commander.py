@@ -60,6 +60,14 @@ class ChickenCoopCommander:
                     basic_logger.info("es wird dunkel bei bei %.2f lx - Licht an! - Rein in die Bude", current_brightness)
                     self.__cc.lightOn()
                 else:
+                      
+                    if self.__door_down_counter != 0:
+                        
+                        self.__door_down_counter -= 1
+                        
+                        if self.__door_down_counter == 0:
+                            self.__cc.doorClose()
+                            basic_logger.info("Alle herinnen? - Türl zu!!")                    
                     
                     if self.__lights_out_counter != 0:
                         
@@ -69,14 +77,6 @@ class ChickenCoopCommander:
                             
                             basic_logger.info("Schlafenszeit!! - A Ruah is und Licht aus")
                             self.__cc.lightOff()
-                        
-                    if self.__door_down_counter != 0:
-                        
-                        self.__door_down_counter -= 1
-                        
-                        if self.__door_down_counter == 0:
-                            self.__cc.doorClose()
-                            basic_logger.info("Alle herinnen? - Türl zu!!")
 
                     
             if current_brightness > settings.brightness_high:
