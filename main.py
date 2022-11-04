@@ -14,9 +14,7 @@ from chicken_coop import ChickenCoop
 
 
 if __name__ == "__main__":
-    
 
-    
     data_formatter = logging.Formatter('%(asctime)s %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
     
     temp_logger = logging.getLogger("Temperature_Sensor")
