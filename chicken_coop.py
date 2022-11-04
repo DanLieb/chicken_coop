@@ -62,19 +62,18 @@ class ChickenCoop:
             
             print("Connected to temperature sensor")
             
-                
-            self.light = False
+            # 
+            
+            bus = smbus.SMBus(1)
+            self.brightness_sensor = BH1750(bus)
+            print("Connected to the brightness sensor")
             
             self.heating = False
             
-            print("Connected to temperature sensor")
-            
-            bus = smbus.SMBus(1)
-            self._bsensor = BH1750(bus)
-            
+            self.light = False
             
         except Exception as e:
-            print("OOps i f***** it up while looking for temperature sensors\n %s" % e)
+            print("OOps i f***** it up: \n %s" % e)
             
         #
             # Init Brightness Sensor
@@ -85,13 +84,6 @@ class ChickenCoop:
         #     self.pi.i2c_write_byte(self.brightness_sensor, 0x01)
             
         #     print("handle = %i" % self.brightness_sensor)
-            
-
-    def lightOn(self):
-        print("Not Implemented Yet")
-        
-    def lightOff(self):
-        print("Not Implemented Yet")
     
     @staticmethod    
     def callbackUp(gpio, level, tick):
@@ -105,7 +97,6 @@ class ChickenCoop:
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
         # print('Zeitpunkt: %s  Level: %i on GPIO %i' % (current_time, level, gpio))
         global_chicken_coop.doorClose()
-    
     
     def heatingOn(self):
         self.heating = True
@@ -145,8 +136,7 @@ class ChickenCoop:
         return current_temperature
     
     def getBrightness(self):
-        b = self._bsensor.measure_high_res()
-        print("Helligkeit: %.2f lx" % b)
+        b = self.brightness_sensor.measure_high_res()
         return b
         
     def isHeating(self):
@@ -156,27 +146,8 @@ class ChickenCoop:
         return self.light
     
     
-    # def run(self):
-    #     while (True):
-    #         try:  
-    #             current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-                
-                
-    #             # print('Zeitpunkt: %s  Temperatur: %.2f °C' % (current_time, current_temperature))
-                
-
-                
-    #             time.sleep(1.)
-                
-    #         except KeyboardInterrupt:
-    #             print('Byebye')
-    #             break
-    #         except Exception as e:
-    #             print('Another Error happend: %s' % e)
-    #             break
-    
     def __del__(self):
-        self.pi.i2c_close(self.brightness_sensor)
+        
         self.heatingOff()
         self.lightOff()
         self.pi.stop()
