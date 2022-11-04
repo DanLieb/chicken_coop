@@ -6,6 +6,11 @@ import settings
 # from chicken_coop_rest import ChickeChickenCoopRestServer
 # from chicken_coop import ChickenCoop
 
+temp_logger = logging.getLogger("Temperature_Sensor")
+
+brightness_logger = logging.getLogger("Brightness_Sensor")
+
+
 
 class ChickenCoopCommander:
     
@@ -28,7 +33,7 @@ class ChickenCoopCommander:
     def runTemperatureManagement(self):
         while True:
             current_temperature = self.__cc.getTemperature()
-            logging.info("Temperatur bei %.2f", current_temperature)
+            temp_logger.info("T= %.2f °C", current_temperature)
             
             if (current_temperature <= settings.temperature_low and self.__cc.isHeating() == False):
                 self.__cc.heatingOn()
@@ -45,12 +50,12 @@ class ChickenCoopCommander:
         while True:
             current_brightness = self.__cc.getBrightness()
             
-            # logging.info("Helligkeit bei %.2f lx", current_brightness)
+            brightness_logger.info("B= %.2f lx", current_brightness)
             
             if current_brightness < settings.brightness_low:
                 if not self.__light_goodnight:
                     self.__light_goodnight = True
-                    logging.info("es wird dunkel - Licht an! - Rein in die Bude")
+                    logging.info("es wird dunkel bei bei %.2f lx - Licht an! - Rein in die Bude", current_brightness)
                     self.__cc.lightOn()
                 else:
                     
@@ -60,7 +65,7 @@ class ChickenCoopCommander:
                         
                         if self.__lights_out_counter == 0:
                             
-                            logging.info("Alle herinnen? - Schlafenszeit!!")
+                            logging.info("Schlafenszeit!! - A Ruah is und Licht aus")
                             self.__cc.lightOff()
                         
                     if self.__door_down_counter != 0:
@@ -81,18 +86,6 @@ class ChickenCoopCommander:
                     self.__cc.doorOpen() 
                     logging.info("Guten Morgen! - Raus mit euch!!")
 
-                    
-                
-
-                
-            
-            # if self.__cc.isLight() == True:
-            #     self.__cc.lightOff()
-                
-            # else:
-            #     self.__cc.lightOn()    
-            
-            
 
             if self.__light_stop.is_set():
                 break

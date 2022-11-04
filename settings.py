@@ -56,5 +56,8 @@ lights_out_seconds = 16
 door_down_seconds = 4
         
 
-        
+# LOGGING
+
+TEMP_LOGS = "logs/temperature.log"
+BRIGHTNESS_LOGS = "logs/brightness.log"
         
