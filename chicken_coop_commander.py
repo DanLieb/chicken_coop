@@ -50,30 +50,34 @@ class ChickenCoopCommander:
             if current_brightness < settings.brightness_low:
                 if not self.__light_goodnight:
                     self.__light_goodnight = True
+                    logging.info("es wird dunkel - Licht an! - Rein in die Bude")
                     self.__cc.lightOn()
-                    logging.info("es wird Nacht - Licht an! - Rein in die Bude")
                 else:
                     
                     if self.__lights_out_counter != 0:
+                        
                         self.__lights_out_counter -= 1
                         
                         if self.__lights_out_counter == 0:
-                            self.__cc.lightOff()
+                            
                             logging.info("Alle herinnen? - Schlafenszeit!!")
+                            self.__cc.lightOff()
                         
-                    if self.__door_counting:
+                    if self.__door_down_counter != 0:
+                        
                         self.__door_down_counter -= 1
+                        
                         if self.__door_down_counter == 0:
                             self.__cc.doorClose()
-                            self.__door_counting = False
-                            self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
                             logging.info("Alle herinnen? - Türl zu!!")
+
                     
             if current_brightness > settings.brightness_high:
                 
                 if self.__light_goodnight:
                     self.__light_goodnight = False  
                     self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
+                    self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
                     self.__cc.doorOpen() 
                     logging.info("Guten Morgen! - Raus mit euch!!")
 
