@@ -36,8 +36,8 @@ pin_button_down = 12   # Taster 2
 # Functions are called every n seconds
 #
 
-timing_temperature = 1.
-timing_brightness = 1.
+timing_temperature = 10.
+timing_brightness = 4.
 
 # Das gibt ne saftige Fehlermeldung. mal schauen was da los ist.
 # door_open_time = time(hours=7, minutes=30)
@@ -52,8 +52,8 @@ timing_brightness = 1.
 #
  
 
-lights_out_seconds = 5
-door_down_seconds = 3
+lights_out_seconds = 16
+door_down_seconds = 4
         
 
         

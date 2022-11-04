@@ -21,6 +21,7 @@ class ChickenCoopCommander:
         self.__lights_out_counter = int(settings.lights_out_seconds / settings.timing_brightness)
         self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
         self.__light_goodnight = False
+        
     def runTemperatureManagement(self):
         while True:
             current_temperature = self.__cc.getTemperature()
@@ -63,9 +64,10 @@ class ChickenCoopCommander:
                         logging.info("Alle herinnen? - Türl zu!!")
                     
             if current_brightness > settings.brightness_high:
-                self.__light_goodnight = False  
                 
-                self.__cc.doorOpen() 
+                if self.__light_goodnight:
+                    self.__light_goodnight = False  
+                    self.__cc.doorOpen() 
                 
 
                 
