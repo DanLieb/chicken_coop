@@ -37,7 +37,8 @@ class ChickenCoopCommander:
     def runLightManagement(self):
         while True:
             current_brightness = self.__cc.getBrightness()
-            logging.info("Helligkeit bei %.2f Lux", current_brightness)
+            logging.info("Helligkeit bei %.2f lx", current_brightness)
+            
             if self.__cc.isLight() == True:
                 self.__cc.lightOff()
                 
