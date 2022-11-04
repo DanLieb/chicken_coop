@@ -70,7 +70,7 @@ class ChickenCoop:
             print("Connected to temperature sensor")
             
             bus = smbus.SMBus(1)
-            b_sensor = BH1750(bus)
+            self._bsensor = BH1750(bus)
             
             
         except Exception as e:
@@ -145,23 +145,23 @@ class ChickenCoop:
         return current_temperature
     
     def getBrightness(self):
-        print("getBrightness(): handle = %i" % self.brightness_sensor)
-        (count, data) = self.pi.i2c_read_i2c_block_data(self.brightness_sensor, 0x20, 2)
-        print("getBrightness(): count: %i data:" % count)
+        # print("getBrightness(): handle = %i" % self.brightness_sensor)
+        # (count, data) = self.pi.i2c_read_i2c_block_data(self.brightness_sensor, 0x20, 2)
+        # print("getBrightness(): count: %i data:" % count)
         
-        if count >= 0:
-            pass
-        else:
+        # if count >= 0:
+        #     pass
+        # else:
             
-            print("%s" % pigpio.error_text(count))
+        #     print("%s" % pigpio.error_text(count))
             
         
         #data = self.pi.i2c_read_word_data(self.brightness_sensor, 0x20)
         #print("data = %i" % data)
         #count = data >> 8 | (data & 0xff) << 8
         #print("count = %i" % count)
-        brightness = count / 1.2
-        return brightness
+        # brightness = count / 1.2
+        return self._bsensor.measure_high_res()
         
     def isHeating(self):
         return self.heating
