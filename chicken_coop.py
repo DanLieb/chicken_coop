@@ -141,6 +141,13 @@ class ChickenCoop:
         (count, data) = self.pi.i2c_read_i2c_block_data(self.brightness_sensor, 0x20, 2)
         print("getBrightness(): count: %i data:" % count)
         
+        if count >= 0:
+            pass
+        else:
+            
+            print("%s" % self.pi.error_text(count))
+            
+        
         #data = self.pi.i2c_read_word_data(self.brightness_sensor, 0x20)
         #print("data = %i" % data)
         #count = data >> 8 | (data & 0xff) << 8
