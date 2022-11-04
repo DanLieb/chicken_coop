@@ -135,7 +135,7 @@ class ChickenCoop:
         return current_temperature
     
     def getBrightness(self):
-        data = self.pi.i2c_read_word_data(settings.brightness_address, 0x20)
+        data = self.pi.i2c_read_word_data(self.brightness_sensor, 0x20)
         print("data = %i" % data)
         count = data >> 8 | (data & 0xff) << 8
         print("count = %i" % count)
