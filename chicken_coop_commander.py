@@ -68,6 +68,9 @@ class ChickenCoopCommander:
                 if self.__light_goodnight:
                     self.__light_goodnight = False  
                     self.__cc.doorOpen() 
+                    logging.info("Guten Morgen! - Raus mit euch!!")
+                    logging.info("Guten Morgen! - Raus mit euch!!")
+                    
                 
 
                 
