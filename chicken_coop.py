@@ -5,6 +5,8 @@ import logging
 import settings
 import time
 
+from bh1750 import BH1750
+
 
 global_chicken_coop = None
 
@@ -53,32 +55,35 @@ class ChickenCoop:
                 
                 self.pi.callback(settings.pin_button_up, pigpio.FALLING_EDGE, self.callbackUp)
                 self.pi.callback(settings.pin_button_down, pigpio.FALLING_EDGE, self.callbackDown)
-                
-                # open i2c channel for connection with brightness sensor bh1750
-                
-                self.brightness_sensor = self.pi.i2c_open(0, settings.brightness_address)
-                self.pi.i2c_write_byte(self.brightness_sensor, 0x01)
-                
-                print("handle = %i" % self.brightness_sensor)
-                
-                
             
             self.temp_sensor = Pi1Wire().find(settings.mac_sensor_temp)
             
             print("Connected to temperature sensor")
             
-            #
-            # Init Brightness Sensor
-            #
-            
+                
             self.light = False
             
             self.heating = False
             
             print("Connected to temperature sensor")
             
+            bus = smbus.SMBus(1)
+            b_sensor = BH1750(bus)
+            
+            
         except Exception as e:
             print("OOps i f***** it up while looking for temperature sensors\n %s" % e)
+            
+        #
+            # Init Brightness Sensor
+            #
+                            # open i2c channel for connection with brightness sensor bh1750
+        # try:
+        #     self.brightness_sensor = self.pi.i2c_open(0, settings.brightness_address)
+        #     self.pi.i2c_write_byte(self.brightness_sensor, 0x01)
+            
+        #     print("handle = %i" % self.brightness_sensor)
+            
 
     def lightOn(self):
         print("Not Implemented Yet")
