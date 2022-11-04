@@ -57,6 +57,7 @@ class ChickenCoop:
                 # open i2c channel for connection with brightness sensor bh1750
                 
                 self.brightness_sensor = self.pi.i2c_open(0, settings.brightness_address)
+                self.pi.i2c_write_byte(self.brightness_sensor, 0x01)
                 
                 print("handle = %i" % self.brightness_sensor)
                 
@@ -145,7 +146,7 @@ class ChickenCoop:
             pass
         else:
             
-            print("%s" % self.pi.error_text(count))
+            print("%s" % pigpio.error_text(count))
             
         
         #data = self.pi.i2c_read_word_data(self.brightness_sensor, 0x20)
