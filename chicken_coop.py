@@ -139,7 +139,7 @@ class ChickenCoop:
     def getBrightness(self):
         print("getBrightness(): handle = %i" % self.brightness_sensor)
         (count, data) = self.pi.i2c_read_device(self.brightness_sensor, 2)
-        print("getBrightness(): count: %i data: %i" % (count, data))
+        print("getBrightness(): count: %i data:" % count)
         
         #data = self.pi.i2c_read_word_data(self.brightness_sensor, 0x20)
         #print("data = %i" % data)
