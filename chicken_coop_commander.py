@@ -58,14 +58,14 @@ class ChickenCoopCommander:
                         logging.info("Alle herinnen? - Schlafenszeit!!")
                     
                     if self.__door_down_counter == 0:
-                        self.__cc.closeDoor()
+                        self.__cc.doorClose()
                         self.__door_down_counter = int(settings.door_down_seconds / settings.timing_brightness)
                         logging.info("Alle herinnen? - Türl zu!!")
                     
             if current_brightness > settings.brightness_high:
                 self.__light_goodnight = False  
                 
-                self.__cc.openDoor() 
+                self.__cc.doorOpen() 
                 
 
                 
