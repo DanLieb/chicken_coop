@@ -24,7 +24,7 @@ if __name__ == "__main__":
     temp_logger.addHandler(temp_handler)
     
     brightness_logger = logging.getLogger("Brightness_Sensor")
-    brightness_handler = logging.FileHandler(settings.TEMP_LOGS)
+    brightness_handler = logging.FileHandler(settings.BRIGHTNESS_LOGS)
     brightness_handler.setFormatter(data_formatter)
     brightness_logger.setLevel(logging.INFO)
     brightness_logger.addHandler(brightness_handler)

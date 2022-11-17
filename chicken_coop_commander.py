@@ -2,6 +2,9 @@ import time
 import logging
 import threading
 
+import json
+from flask import Flask, request, jsonify
+
 import settings
 # from chicken_coop_rest import ChickeChickenCoopRestServer
 # from chicken_coop import ChickenCoop
@@ -31,11 +34,31 @@ class ChickenCoopCommander:
         # self.__door_counting = True
         self.__light_goodnight = False
         
+        self.__flask_app = Flask(__name__)
         
+        self.__flask_app.add_url_rule(rule='/door', endpoint='door', view_func=self.setDoor, methods=['POST'])
+        
+        
+        self.__rest_thread = threading.Thread(target=self.runRestServer)
+        self.__rest_stop = threading.Event()
+        
+    def __del__(self):
+        basic_logger.info("Shutting Down Everything - Prepare for evacuation")
+        self.__temp_stop.set()
+        self.__temp_thread.join()
+        
+        self.__light_stop.set()
+        self.__light_thread.join()
+        
+        self.__rest_stop.set()
+        self.__rest_thread.join()
+        
+        
+                
     def runTemperatureManagement(self):
         while True:
             current_temperature = self.__cc.getTemperature()
-            temp_logger.info("T= %.2f °C", current_temperature)
+            # temp_logger.info("T= %.2f °C", current_temperature)
             
             if (current_temperature <= settings.temperature_low and self.__cc.isHeating() == False):
                 self.__cc.heatingOn()
@@ -95,18 +118,19 @@ class ChickenCoopCommander:
             # i dont care about a slight tick/seconds deviation 
             time.sleep(settings.timing_brightness)
             
+    def runRestServer(self):
+        self.__flask_app.run()
+    
     def run(self):
-        basic_logger.info("Starting Light & Temperature Management")
-        
+              
         self.__temp_thread.start()
         self.__light_thread.start()
-        
+
         basic_logger.info("Starting Light & Temperature Management Done!")
         
-    def __del__(self):
-        basic_logger.info("Shutting Down Everything - Prepare for evacuation")
-        self.__temp_stop.set()
-        self.__temp_thread.join()
+        self.__rest_thread.start()
         
-        self.__light_stop.set()
-        self.__light_thread.join()
+    def setDoor(self):
+        record = json.loads(request.data)
+        print(jsonify(record))
+        return 

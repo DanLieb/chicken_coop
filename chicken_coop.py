@@ -15,7 +15,6 @@ global_chicken_coop = None
 class ChickenCoop:
     """A Class integrating all sensors and outputs available"""
 
- 
     def __init__(self):        
         global global_chicken_coop 
         global_chicken_coop = self
@@ -62,7 +61,6 @@ class ChickenCoop:
             
             basic_logger.info("Connected to the temperature sensor")
             
-            # 
             
             bus = smbus.SMBus(1)
             self.brightness_sensor = BH1750(bus)
