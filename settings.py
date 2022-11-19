@@ -8,8 +8,8 @@ mac_sensor_temp = "283c01f0953119"
 # temperature settings
 #      
 
-temperature_low = 27
-temperature_high = temperature_low + 3
+temperature_low = 2
+temperature_high = temperature_low + 8
 
 #
 # brightness settings
@@ -37,7 +37,7 @@ pin_button_down = 12   # Taster 2
 #
 
 timing_temperature = 10.
-timing_brightness = 2.
+timing_brightness = 10.
 
 # Das gibt ne saftige Fehlermeldung. mal schauen was da los ist.
 # door_open_time = time(hours=7, minutes=30)
@@ -52,12 +52,19 @@ timing_brightness = 2.
 #
  
 
-lights_out_seconds = 16
-door_down_seconds = 8
-        
+lights_out_seconds = 900 # 900
+door_down_seconds = 600 # 600
 
+# When turned on manually lights will be out after ... seconds
+
+lights_manual_countdown = 900 # 900     
+
+# When turned on manually heating will be out after ... seconds
+
+heating_manual_countdown = 600 # 600
+        
 # LOGGING
 
-TEMP_LOGS = "logs/temperature.log"
-BRIGHTNESS_LOGS = "logs/brightness.log"
+TEMP_LOGS = "/home/daniel/projects/chicken_coop/logs/temperature.log"
+BRIGHTNESS_LOGS = "/home/daniel/projects/chicken_coop/logs/brightness.log"
         
