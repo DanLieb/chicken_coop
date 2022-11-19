@@ -8,8 +8,8 @@ mac_sensor_temp = "283c01f0953119"
 # temperature settings
 #      
 
-temperature_low = 2
-temperature_high = temperature_low + 8
+temperature_low = 4
+temperature_high = temperature_low + 6
 
 #
 # brightness settings
@@ -17,8 +17,8 @@ temperature_high = temperature_low + 8
 
 brightness_address = 0x23
 
-brightness_low = 5
-brightness_high = brightness_low + 50
+brightness_low = 7
+brightness_high = brightness_low + 25
 
 #
 # GPIO - Pins
@@ -36,8 +36,8 @@ pin_button_down = 12   # Taster 2
 # Functions are called every n seconds
 #
 
-timing_temperature = 10.
-timing_brightness = 10.
+timing_temperature = 5.
+timing_brightness = 5.
 
 # Das gibt ne saftige Fehlermeldung. mal schauen was da los ist.
 # door_open_time = time(hours=7, minutes=30)
@@ -52,7 +52,7 @@ timing_brightness = 10.
 #
  
 
-lights_out_seconds = 900 # 900
+lights_out_seconds = 1200 # 900
 door_down_seconds = 600 # 600
 
 # When turned on manually lights will be out after ... seconds
