@@ -101,7 +101,7 @@ class ChickenCoopCommander:
                 if self.__temp_stop.is_set():
                     self.__cc.heatingOff()
                     break
-                time.sleep(settings.timing_temperature)
+            time.sleep(settings.timing_temperature)
                 
     def runLightManagement(self):
         while True:
@@ -168,6 +168,9 @@ class ChickenCoopCommander:
             if self.__light_stop.is_set():
                 break
             
+            if self.__door_down_counter == 0:
+                self.__cc.doorClose()
+            
             # i dont care about a slight tick/seconds deviation 
             time.sleep(settings.timing_brightness)
             
@@ -194,8 +197,11 @@ class ChickenCoopCommander:
             return jsonify({'action': 'chicken_coop.doorClose()',
                             'status': 'done'})
         elif status == "get":
-            return jsonify({'action': 'chicken_coop.getDoorStatus()',
-                            'status': 'not implemented'})
+            return jsonify({'action': 'chicken_coop.isDoorClosed()',
+                            'status': self.__cc.isDoorClosed})
+        elif status == "status":
+            return jsonify({'action': 'chicken_coop.isDoorClosed()',
+                            'status': self.__cc.isDoorClosed})
         else:
             basic_logger.info("What do you mean? door status :%s is unknown" % status)
             return jsonify({'action': 'None',
@@ -211,6 +217,9 @@ class ChickenCoopCommander:
             return jsonify({'action': 'chicken_coop.manualLightOff()',
                             'status': 'done'})
         elif status == "get":
+            return jsonify({'action': 'chicken_coop.getLightStatus()',
+                            'status': self.__cc.isLight() })
+        elif status == "status":
             return jsonify({'action': 'chicken_coop.getLightStatus()',
                             'status': self.__cc.isLight() })
         else:
@@ -230,13 +239,16 @@ class ChickenCoopCommander:
         elif status == "get":
             return jsonify({'action': 'chicken_coop.getHeatingStatus()',
                             'status': self.__cc.isHeating()})
+        elif status == "status":
+            return jsonify({'action': 'chicken_coop.getHeatingStatus()',
+                            'status': self.__cc.isHeating()})
         else:
             basic_logger.info("What do you mean? heating status :%s is unknown" % status)
             return jsonify({'action': 'None',
                             'status': 'failed'})
             
     def measure(self, status):
-        if status =="light":
+        if status =="temperature":
             return jsonify({'action': 'chicken_coop.measureLight()',
                             'data': self.__cc.getTemperature(),
                             'status': 'done'})

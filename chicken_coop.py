@@ -69,6 +69,8 @@ class ChickenCoop:
             self.heating = False
             
             self.light = False
+
+            self.is_door_closed = False
             
         except Exception as e:
             basic_logger.error("OOps i f***** it up: \n %s" % e)
@@ -106,6 +108,7 @@ class ChickenCoop:
         self.pi.write(settings.pin_relais_in_3, 0)
         time.sleep(0.5)
         self.pi.write(settings.pin_relais_in_3, 1)
+        self.is_door_closed = False
         
 
     def doorClose(self):
@@ -115,6 +118,7 @@ class ChickenCoop:
         self.pi.write(settings.pin_relais_in_4, 0)
         time.sleep(0.5)
         self.pi.write(settings.pin_relais_in_4, 1)
+        self.is_door_closed= True
         
     def getTemperature(self):
         current_temperature = self.temp_sensor.get_temperature()
@@ -129,6 +133,9 @@ class ChickenCoop:
     
     def isLight(self):
         return self.light
+
+    def isDoorClosed(self):
+        return self.is_door_closed
     
     
     def __del__(self):

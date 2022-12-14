@@ -8,8 +8,8 @@ mac_sensor_temp = "283c01f0953119"
 # temperature settings
 #      
 
-temperature_low = 4
-temperature_high = temperature_low + 6
+temperature_low = 3
+temperature_high = temperature_low + 8
 
 #
 # brightness settings
@@ -17,8 +17,8 @@ temperature_high = temperature_low + 6
 
 brightness_address = 0x23
 
-brightness_low = 7
-brightness_high = brightness_low + 25
+brightness_low = 3
+brightness_high = brightness_low + 6
 
 #
 # GPIO - Pins
