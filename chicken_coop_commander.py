@@ -87,7 +87,7 @@ class ChickenCoopCommander:
                 self.__cc.heatingOff()
             
             # Automated Heatings depending on the chicken coop temperature
-            if self.__light_goodnight:
+            if self.__light_goodnight and self.__cc.isDoorClosed():
                 current_temperature = self.__cc.getTemperature()
                 # temp_logger.info("T= %.2f °C", current_temperature)
                 
@@ -101,6 +101,7 @@ class ChickenCoopCommander:
                 if self.__temp_stop.is_set():
                     self.__cc.heatingOff()
                     break
+                
             time.sleep(settings.timing_temperature)
                 
     def runLightManagement(self):
@@ -168,7 +169,7 @@ class ChickenCoopCommander:
             if self.__light_stop.is_set():
                 break
             
-            if self.__door_down_counter == 0:
+            if self.__door_down_counter == 0 and self.__light_goodnight == True:
                 self.__cc.doorClose()
             
             # i dont care about a slight tick/seconds deviation 
