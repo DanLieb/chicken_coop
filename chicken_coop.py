@@ -21,6 +21,7 @@ class ChickenCoop:
         
         try:
             self.pi = pigpio.pi()
+            
             if not self.pi.connected:
                 basic_logger.error("OOps i couldn't connect to the pigpio daemon!")
             else:
