@@ -25,7 +25,7 @@ class ChickenCoop:
             if not self.pi.connected:
                 basic_logger.error("OOps i couldn't connect to the pigpio daemon!")
             else:
-                basic_logger.info("Setting up output pins")
+                basic_logger.info("Setting Up Raspberry Pins...")
                 
                 self.pi.set_mode(settings.pin_relais_in_1, pigpio.OUTPUT)
                 self.pi.set_mode(settings.pin_relais_in_2, pigpio.OUTPUT)
@@ -40,8 +40,6 @@ class ChickenCoop:
                 #
                 # Setup Input Pins 
                 #
-                
-                basic_logger.info("Setting up input pins")
                 
                 self.pi.set_mode(settings.pin_button_up, pigpio.INPUT)
                 self.pi.set_mode(settings.pin_button_down, pigpio.INPUT)
@@ -58,14 +56,19 @@ class ChickenCoop:
                 self.pi.callback(settings.pin_button_up, pigpio.FALLING_EDGE, self.callbackUp)
                 self.pi.callback(settings.pin_button_down, pigpio.FALLING_EDGE, self.callbackDown)
             
+            basic_logger.info("Setting Up Temperature Sensor...")
+            
             self.temp_sensor = Pi1Wire().find(settings.mac_sensor_temp)
             
-            basic_logger.info("Connected to the temperature sensor")
+            basic_logger.info("Setting Up Light Sensor...")
             
+            # TODO: Set up the higher sensitivity light detection 
             
             bus = smbus.SMBus(1)
             self.brightness_sensor = BH1750(bus)
-            basic_logger.info("Connected to the brightness sensor")
+            self.brightness_sensor.cont_high_res()
+            
+            basic_logger.info("Starting ChickenCoopCommander...")
             
             self.heating = False
             

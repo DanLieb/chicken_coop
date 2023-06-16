@@ -103,7 +103,11 @@ class ChickenCoopCommander:
                     break
                 
             time.sleep(settings.timing_temperature)
-                
+    
+    # TODO: Seperate Light and Door State Management!!
+    
+    # 
+                    
     def runLightManagement(self):
         while True:
 
@@ -169,8 +173,8 @@ class ChickenCoopCommander:
             if self.__light_stop.is_set():
                 break
             
-            if self.__door_down_counter == 0 and self.__light_goodnight == True:
-                self.__cc.doorClose()
+            # if self.__door_down_counter == 0 and self.__light_goodnight == True:
+            #    self.__cc.doorClose()
             
             # i dont care about a slight tick/seconds deviation 
             time.sleep(settings.timing_brightness)
